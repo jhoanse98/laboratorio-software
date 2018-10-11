@@ -19,6 +19,8 @@ var bcrypt = require("bcrypt-nodejs");
 
 var token = require("../tokens/token.js");
 
+var tokenemail = require("../tokens/tokencorreo.js");
+
 function controladorusuario(req,res){
 	res.status(200).send({mensaje: "probando controlador de usuarios"})
 }
@@ -157,12 +159,10 @@ function cambiarcontrasena(req,res){
 
 	Usuario.find({email:correo}, (error,correoencontrado)=>{
 		if(error){
-			console.log("hola mundo")
 			res.status(404).send({mensaje: "no se puede acceder a la peticion"})
 		}
 		else{
 			if(!correoencontrado){
-				console.log("hooooooooolaaaaaaaa")
 				res.status(500).send({mensaje:"el correo no existe en la base de datos"})
 			}
 			else{
@@ -195,7 +195,7 @@ function cambiarcontrasena(req,res){
 					}
 					else{
 						console.log("mensaje enviado")
-						res.status(200).json(parametros)
+						res.status(200).json({correoencontrado})
 					}
 				})
 
@@ -208,6 +208,33 @@ function cambiarcontrasena(req,res){
 }
 
 
+function Deleteusuario(req, res){
+	var id = req.params.id;
+
+	if(id != req.usuariotoken.sub){
+	return res.status(500).send({mensaje: "no tienes permisos para actualizar este usuario"})	
+	}
+
+	//recorremos la base de datos  por el metodo findByIdAndRemove
+
+	usuario.findByIdAndRemove(id, (error, usuarioBorrado)=>{
+		if(error){
+			res.status(500).send({mensaje: "error al borrar el usuario"})
+		}
+		else{
+			if(!usuarioBorrado){
+				res.status(404).send({mensaje:" no se ha podido borrar al usuario"})
+			}
+
+			else{
+				res.status(200).send(usuarioBorrado)
+			}
+		}
+	}
+)
+
+}
+
 
 
 
@@ -219,5 +246,6 @@ module.exports = {
 	loginUsuario,
 	getusuario,
 	actualizarusuario,
-	cambiarcontrasena
+	cambiarcontrasena,
+	Deleteusuario
 }
