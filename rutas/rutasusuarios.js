@@ -47,7 +47,7 @@ api.put("/actualizar-usuario/:id", authentication.autenticacion, ControladorDeUs
 
 // creamos la ruta para eliminar un usuario de la base de datos
 
-//api.delete("/eliminar-usuario/:id", authentication.autenticacion, ControladorDeUsuarios.Deleteusuario)
+api.delete("/eliminar-usuario/:id", authentication.autenticacion, ControladorDeUsuarios.Deleteusuario)
 //exportamos api
 
 module.exports= api;

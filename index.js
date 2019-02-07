@@ -17,7 +17,10 @@ var port = process.env.PORT || 4001;
 
 //conexion
 
-mongoose.connect("mongodb://grandas:98020655860@ds111123.mlab.com:11123/prueba", (error, respuesta) => {
+//mongoose.connect("mongodb://localhost:27017/DocentHelper",
+//mongose.connect("mongodb://grandas:98020655860@ds111123.mlab.com:11123/prueba",
+
+mongoose.connect("mongodb://localhost:27017/DocentHelper", (error, respuesta) => {
 
 		if(error){
 			throw error;

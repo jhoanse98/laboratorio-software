@@ -16,7 +16,8 @@ var usuarioschema = Schema({
 	email: String,
 	telefono: String,
 	password: String,
-	token: Boolean
+	token: Boolean,
+	username: String
 })
 
 module.exports = mongoose.model("usuarios", usuarioschema);

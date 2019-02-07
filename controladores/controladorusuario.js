@@ -32,30 +32,57 @@ function crearUsuario(req,res){
 	var parametros = req.body;
 	//console.log(parametros)
 	usuario.nombre = parametros.nombre;
+	var nombre= usuario.nombre;
 	usuario.apellido= parametros.apellido;
+	var apellido= usuario.apellido;
 	usuario.documento= parametros.documento;
 	usuario.tipodedocumento= parametros.tipodedocumento;
 	usuario.email= parametros.email;
-	console.log(parametros.navidad);
+	usuario.username= usuario.nombre+"."+usuario.apellido;
+	var username= usuario.username;
+	var bool= true;
 	
+	Usuario.findOne({apellido:apellido, nombre:nombre}, (error, usuarioencontrado)=>{
+		if(error){
+			res.status(500).send({mensaje: "error al encontrar al usuario"})
+		}
+		else{
+			if(usuarioencontrado.username != null){
+				console.log("hola mundo");
+				username = usuario.username+String(Math.floor(Math.random()*999) + 100);
+				console.log(username);
+				bool=false;
+				//console.log(usuarioencontrado);
 
-	if(parametros.password){
-
-		bcrypt.hash(parametros.password, null, null, function(error, hash){
-
-			usuario.password=hash;
-			if (parametros.nombre != null){
-				usuario.save((error, usuarioguardado)=>{
-					if (error){
-						res.status(500).send({mensaje: "hubo un error en el guardado de usuario"})
-					}
-					else{
-						res.status(200).send({usuarioguardado})
-
-					}
-				})
 			}
-		})
+		}
+		
+		}
+	)
+	console.log("hello world")
+	usuario.username= username;
+	console.log(usuario.username);
+	if(bool){
+
+		if(parametros.password){
+			console.log("otra prueba")
+			bcrypt.hash(parametros.password, null, null, function(error, hash){
+
+				usuario.password=hash;
+				if (parametros.nombre != null){
+					usuario.save((error, usuarioguardado)=>{
+						if (error){
+							res.status(500).send({mensaje: "hubo un error en el guardado de usuario"})
+							console.log("aqui esta el problema")
+						}
+						else{
+							res.status(200).send({usuarioguardado})
+
+						}
+					})
+				}
+			})
+		}
 	}
 	}
 
@@ -119,6 +146,7 @@ function actualizarusuario(req,res){
 	console.log("hola mundo")
 
 	var id = req.params.id;
+
 
 	//tomamos los datos del formulario
 	var actualizar = req.body;
@@ -210,14 +238,15 @@ function cambiarcontrasena(req,res){
 
 function Deleteusuario(req, res){
 	var id = req.params.id;
-
+	console.log(id);
+	console.log("hola mundo")
 	if(id != req.usuariotoken.sub){
 	return res.status(500).send({mensaje: "no tienes permisos para actualizar este usuario"})	
 	}
 
 	//recorremos la base de datos  por el metodo findByIdAndRemove
 
-	usuario.findByIdAndRemove(id, (error, usuarioBorrado)=>{
+	Usuario.findByIdAndRemove(id, (error, usuarioBorrado)=>{
 		if(error){
 			res.status(500).send({mensaje: "error al borrar el usuario"})
 		}
